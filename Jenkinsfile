@@ -1,30 +1,17 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
+  agent any
+  stages {
+    stage('SCM') {
+      steps {
+          git credentialsId: 'GITHUB_ID', url: 'https://github.com/debolaolowose/SampleApp_linux.git'
+          echo "Connected Successfully"
+      }
     }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-            }
-        }
+    stage('Testing pipeline stage 2') {
+      steps {
+          echo "Hello"
+      }
     }
+  }
+  
 }
